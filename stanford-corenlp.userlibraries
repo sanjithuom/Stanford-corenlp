@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="ejml-0.23">
+    <archive path="C:/Users/SANJI/ReviewWorkspace/Stanford-corenlp/ejml-0.23.jar" />
+    <archive path="C:/Users/SANJI/ReviewWorkspace/Stanford-corenlp/javax.json.jar" />
+    <archive path="C:/Users/SANJI/ReviewWorkspace/Stanford-corenlp/joda-time.jar" />
+    <archive path="C:/Users/SANJI/ReviewWorkspace/Stanford-corenlp/jollyday.jar" />
+    <archive path="C:/Users/SANJI/ReviewWorkspace/Stanford-corenlp/xom.jar" />
+    <archive path="C:/Users/SANJI/ReviewWorkspace/Stanford-corenlp/stanford-corenlp-3.5.0-models.jar" />
+  </library>
+</eclipse-userlibraries>
+
