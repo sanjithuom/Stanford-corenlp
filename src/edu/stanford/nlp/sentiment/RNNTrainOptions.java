@@ -7,7 +7,7 @@ public class RNNTrainOptions implements Serializable {
   public int batchSize = 27;
 
   /** Number of times through all the trees */
-  public int epochs = 400;
+  public int epochs = 1;
 
   public int debugOutputEpochs = 8;
 

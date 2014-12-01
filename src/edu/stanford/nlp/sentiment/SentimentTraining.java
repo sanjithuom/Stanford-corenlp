@@ -132,7 +132,7 @@ public class SentimentTraining {
 
     boolean filterUnknown = false;
 
-    String modelPath = "model.ser.gz";
+    String modelPath = "model\\model.ser.gz";
 
     for (int argIndex = 0; argIndex < args.length; ) {
       if (args[argIndex].equalsIgnoreCase("-train")) {

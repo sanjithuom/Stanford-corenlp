@@ -1,6 +1,9 @@
 package edu.stanford.nlp.sentiment;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -54,6 +57,7 @@ public class SentimentPipeline {
 	private static final NumberFormat NF = new DecimalFormat("0.0000");
 	StanfordCoreNLP tokenizer;
 	StanfordCoreNLP pipeline;
+
 	public static enum Output {
 		PENNTREES, VECTORS, ROOT, PROBABILITIES
 	}
@@ -61,7 +65,8 @@ public class SentimentPipeline {
 	public static enum Input {
 		TEXT, TREES
 	}
-	public SentimentPipeline(){
+
+	public SentimentPipeline() {
 		Input inputFormat = Input.TEXT;
 		String tlppClass = DEFAULT_TLPP_CLASS;
 		// We construct two pipelines. One handles tokenization, if
@@ -69,8 +74,9 @@ public class SentimentPipeline {
 		// them to sentiment trees.
 		Properties pipelineProps = new Properties();
 		Properties tokenizerProps = null;
-		if(true){
-			pipelineProps.setProperty("sentiment.model", "sentiment.binary.ser.gz");
+		if (true) {
+			pipelineProps.setProperty("sentiment.model",
+					"sentiment.binary.ser.gz");
 		}
 		if (inputFormat == Input.TREES) {
 			pipelineProps.setProperty("annotators", "binarizer, sentiment");
@@ -84,10 +90,11 @@ public class SentimentPipeline {
 			tokenizerProps = new Properties();
 			tokenizerProps.setProperty("annotators", "tokenize, ssplit");
 		}
-		tokenizer = (tokenizerProps == null) ? null
-				: new StanfordCoreNLP(tokenizerProps);
+		tokenizer = (tokenizerProps == null) ? null : new StanfordCoreNLP(
+				tokenizerProps);
 		pipeline = new StanfordCoreNLP(pipelineProps);
 	}
+
 	/**
 	 * Sets the labels on the tree (except the leaves) to be the integer value
 	 * of the sentiment prediction. Makes it easy to print out with
@@ -288,20 +295,20 @@ public class SentimentPipeline {
 	}
 
 	public static void main(String[] args) throws IOException {
-//		String parserModel = null;
-//		String sentimentModel = null;
-//
-//		String filename = null;
-//		String fileList = null;
-//		boolean stdin = false;
-//
-//		boolean filterUnknown = false;
-//
-//		List<Output> outputFormats = Arrays
-//				.asList(new Output[] { Output.ROOT });
-//		Input inputFormat = Input.TEXT;
-//
-//		String tlppClass = DEFAULT_TLPP_CLASS;
+		// String parserModel = null;
+		// String sentimentModel = null;
+		//
+		// String filename = null;
+		// String fileList = null;
+		// boolean stdin = false;
+		//
+		// boolean filterUnknown = false;
+		//
+		// List<Output> outputFormats = Arrays
+		// .asList(new Output[] { Output.ROOT });
+		// Input inputFormat = Input.TEXT;
+		//
+		// String tlppClass = DEFAULT_TLPP_CLASS;
 
 		// for (int argIndex = 0; argIndex < args.length; ) {
 		// if (args[argIndex].equalsIgnoreCase("-sentimentModel")) {
@@ -349,29 +356,29 @@ public class SentimentPipeline {
 		// We construct two pipelines. One handles tokenization, if
 		// necessary. The other takes tokenized sentences and converts
 		// them to sentiment trees.
-//		Properties pipelineProps = new Properties();
-//		Properties tokenizerProps = null;
-//		if (sentimentModel != null) {
-//			pipelineProps.setProperty("sentiment.model", sentimentModel);
-//		}
-//		if (parserModel != null) {
-//			pipelineProps.setProperty("parse.model", parserModel);
-//		}
-//		if (stdin) {
-//			pipelineProps.setProperty("ssplit.eolonly", "true");
-//		}
-//		if (inputFormat == Input.TREES) {
-//			pipelineProps.setProperty("annotators", "binarizer, sentiment");
-//			pipelineProps.setProperty("customAnnotatorClass.binarizer",
-//					"edu.stanford.nlp.pipeline.BinarizerAnnotator");
-//			pipelineProps.setProperty("binarizer.tlppClass", tlppClass);
-//			pipelineProps.setProperty("enforceRequirements", "false");
-//		} else {
-//			pipelineProps.setProperty("annotators", "parse, sentiment");
-//			pipelineProps.setProperty("enforceRequirements", "false");
-//			tokenizerProps = new Properties();
-//			tokenizerProps.setProperty("annotators", "tokenize, ssplit");
-//		}
+		// Properties pipelineProps = new Properties();
+		// Properties tokenizerProps = null;
+		// if (sentimentModel != null) {
+		// pipelineProps.setProperty("sentiment.model", sentimentModel);
+		// }
+		// if (parserModel != null) {
+		// pipelineProps.setProperty("parse.model", parserModel);
+		// }
+		// if (stdin) {
+		// pipelineProps.setProperty("ssplit.eolonly", "true");
+		// }
+		// if (inputFormat == Input.TREES) {
+		// pipelineProps.setProperty("annotators", "binarizer, sentiment");
+		// pipelineProps.setProperty("customAnnotatorClass.binarizer",
+		// "edu.stanford.nlp.pipeline.BinarizerAnnotator");
+		// pipelineProps.setProperty("binarizer.tlppClass", tlppClass);
+		// pipelineProps.setProperty("enforceRequirements", "false");
+		// } else {
+		// pipelineProps.setProperty("annotators", "parse, sentiment");
+		// pipelineProps.setProperty("enforceRequirements", "false");
+		// tokenizerProps = new Properties();
+		// tokenizerProps.setProperty("annotators", "tokenize, ssplit");
+		// }
 
 		// int count = 0;
 		// if (filename != null) count++;
@@ -464,22 +471,45 @@ public class SentimentPipeline {
 		//
 		// }
 		SentimentPipeline sentimentPipeline = new SentimentPipeline();
-		sentimentPipeline.sentimentAnalysis("I vomited after drinking the coffee");
-		sentimentPipeline.sentimentAnalysis("taste is bad");
-		sentimentPipeline.sentimentAnalysis("Pizza was delicious");
+		BufferedReader reader1 = new BufferedReader(new FileReader(
+				"sentiment_train.txt"));
+		BufferedReader reader2 = new BufferedReader(new FileReader(
+				"train_new.txt"));
+
+		String line1 = reader1.readLine();
+		String line2 = reader2.readLine();
+		int noOfLine = 0, noOfError = 0;
+		while (line1 != null) {
+			line1 = line1.substring(0, 3);
+			String sentimentLine = sentimentPipeline.sentimentAnalysis(line2).get(0);
+			noOfLine++;
+			if (!line1.equalsIgnoreCase(sentimentLine.substring(0, 3))) {
+				noOfError++;
+				System.out.println(noOfLine + ":" + line1 + " " + sentimentLine
+						+ " " + line2);
+			}
+			line1 = reader1.readLine();
+			line2 = reader2.readLine();
+		}
+		reader1.close();
+		reader2.close();
+		System.out.println("Errors : " + noOfError + " out of " + noOfLine);
+		// sentimentPipeline.sentimentAnalysis("taste is bad");
+
 	}
 
-	public void sentimentAnalysis(String review) {
-
-		List<Output> outputFormats = Arrays
-				.asList(new Output[] { Output.ROOT });
-		
+	public ArrayList<String> sentimentAnalysis(String review) {
+		ArrayList<String> sentiments = new ArrayList<String>();
 		String line = review;
 		Annotation annotation = tokenizer.process(line);
 		pipeline.annotate(annotation);
 		for (CoreMap sentence : annotation
 				.get(CoreAnnotations.SentencesAnnotation.class)) {
-			outputTree(System.out, sentence, outputFormats);
+			// outputTree(System.out, sentence, outputFormats);
+			String polarity = sentence
+					.get(SentimentCoreAnnotations.ClassName.class);
+			sentiments.add(polarity);
 		}
+		return sentiments;
 	}
 }
